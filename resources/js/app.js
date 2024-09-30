@@ -1,12 +1,10 @@
 import '../css/app.css';
 import './bootstrap';
 
-import { createInertiaApp } from '@inertiajs/vue3';
-import { createApp, h } from 'vue';
+import { createInertiaApp, Head, Link, usePage } from '@inertiajs/vue3';
+import { createApp, h, computed } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Layout from './Layouts/GuestLayout.vue';
-
-import { Head } from '@inertiajs/vue3';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -22,6 +20,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .component('Head', Head)
+            .component('Link', Link)
             .use(ZiggyVue)
             .mount(el);
     },
