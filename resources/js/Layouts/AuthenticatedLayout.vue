@@ -15,6 +15,10 @@ const menu = [
         route: 'dashboard',
     },
     {
+        name: 'Chirps',
+        route: 'chirps.index',
+    },
+    {
         name: 'Ingredients',
         route: 'ingredients',
     },
