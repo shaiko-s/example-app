@@ -73,4 +73,5 @@ const editing = ref(false);
             <p v-else
                class="mt-4 text-lg text-gray-900">{{ chirp.message }}</p>
         </div>
+    </div>
 </template>
