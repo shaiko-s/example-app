@@ -38,7 +38,7 @@ Route::get('/products', function () {
 })->name('products');
 
 Route::resource('chirps', ChirpController::class)
-    ->only(['index', 'store', 'update'])
+    ->only(['index', 'store', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
