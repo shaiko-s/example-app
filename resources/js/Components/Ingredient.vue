@@ -60,7 +60,7 @@ const editing = ref(false);
                 </button>
 
                 <!-- delete button-->
-                <Link :href="route('ingredients.destroy', ingredient.id)" method="delete">
+                <Link :href="route('ingredients.destroy', ingredient.id)" as="button" method="delete">
                     <button
                             class="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
                             >
