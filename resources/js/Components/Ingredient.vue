@@ -1,12 +1,32 @@
 <script setup>
+import Dropdown from '@/Components/Dropdown.vue';
+import InputError from '@/Components/InputError.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
-defineProps(['ingredient']);
+import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const props = defineProps(['ingredient']);
+
+const form = useForm({
+    name: props.ingredient.name,
+});
+
+const editing = ref(false);
 </script>
 
 <template>
     <tr>
         <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-            <div class="inline-flex items-center gap-x-3">
+            <form v-if="editing" @submit.prevent="form.put(route('ingredients.update', ingredient.id), { onSuccess: () => editing = false })">
+                <textarea v-model="form.name" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                <InputError :message="form.errors.name" class="mt-2" />
+                <div class="space-x-2">
+                    <PrimaryButton class="mt-4">Save</PrimaryButton>
+                    <button class="mt-4" @click="editing = false; form.reset(); form.clearErrors()">Cancel</button>
+                </div>
+            </form>
+            <div v-else class="inline-flex items-center gap-x-3">
                 <input type="checkbox"
                        class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
                        :id="ingredient.id">
@@ -17,13 +37,17 @@ defineProps(['ingredient']);
         <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
             {{ ingredient.user.name }}</td>
         <td class="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-            {{ dayjs(ingredient.created_at).format('DD-MM-YYYY HH:mm') }}</td>
+            {{ dayjs(ingredient.created_at).format('DD-MM-YYYY HH:mm') }}
+            <small v-if="ingredient.created_at !== ingredient.updated_at" class="text-sm text-gray-600"> &middot; edited</small>
+        </td>
         <!-- edit - delete buttons -->
         <td class="px-4 py-4 text-sm whitespace-nowrap">
-            <div class="flex items-center gap-x-6">
+            <div v-if="ingredient.user.id === $page.props.auth.user.id"
+             class="flex items-center gap-x-6">
                                 <!-- edit button-->
                                 <button
-                        class="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
+                        class="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none"
+                        @click="editing = true">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          fill="none"
                          viewBox="0 0 24 24"
@@ -38,7 +62,8 @@ defineProps(['ingredient']);
 
                 <!-- delete button-->
                 <button
-                        class="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
+                        class="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none"
+                        >
                     <svg xmlns="http://www.w3.org/2000/svg"
                          fill="none"
                          viewBox="0 0 24 24"
