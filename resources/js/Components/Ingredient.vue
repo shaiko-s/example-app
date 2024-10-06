@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
 import { useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import TextInput from './TextInput.vue';
 
 const props = defineProps(['ingredient']);
 
@@ -18,7 +19,7 @@ const editing = ref(false);
     <tr>
         <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
             <form v-if="editing" @submit.prevent="form.put(route('ingredients.update', ingredient.id), { onSuccess: () => editing = false })">
-                <textarea v-model="form.name" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                <TextInput v-model="form.name" class="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
                 <InputError :message="form.errors.name" class="mt-2" />
                 <div class="space-x-2">
                     <PrimaryButton class="mt-4">Save</PrimaryButton>
