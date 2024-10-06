@@ -20,7 +20,7 @@ const menu = [
     },
     {
         name: 'Ingredients',
-        route: 'ingredients',
+        route: 'ingredients.index',
     },
     {
         name: 'Semiproducts',
