@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useForm, Head, usePage } from '@inertiajs/vue3';
 import { capitalizeFirstLetter } from '@/Composable/useStringUtils.js';
 import Ingredient from '@/Components/Ingredient.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 defineProps(['ingredients']);
 
@@ -37,9 +38,9 @@ export default {
                 <!-- Create form -->
                 <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
                     <form @submit.prevent="form.post(route('ingredients.store'), { onSuccess: () => form.reset() })">
-                        <textarea v-model="form.name"
+                        <TextInput v-model="form.name"
                                   placeholder="Name of the ingredient"
-                                  class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                                  class="block w-full h-10 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></TextInput>
                         <InputError :name="form.errors.name"
                                     class="mt-2" />
                         <PrimaryButton class="mt-4">Create</PrimaryButton>
@@ -53,7 +54,7 @@ export default {
                         <h2 class="text-lg font-medium text-gray-800 dark:text-white">{{ pageName }}</h2>
 
                         <span
-                              class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{{
+                              class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-900 dark:text-blue-400">{{
                             ingredients.length }} ingredients</span>
                     </div>
 
@@ -141,7 +142,7 @@ export default {
                     </div>
 
                     <!-- Pagination -->
-                    <div class="flex items-center justify-between mt-6">
+                    <div class="flex items-center justify-between mt-6 mb-6">
                         <a href="#"
                            class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
                             <svg xmlns="http://www.w3.org/2000/svg"
