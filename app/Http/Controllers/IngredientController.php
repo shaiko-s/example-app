@@ -17,7 +17,9 @@ class IngredientController extends Controller
     public function index(): Response
     {
         return Inertia::render('Ingredients/Index', [
-            'ingredients' => Ingredient::with('user:id,name')->orderBy('name')->get(),
+            'ingredients' => Ingredient::with('user:id,name')
+                ->orderBy('name')
+                ->paginate(3),
         ]);
     }
 
