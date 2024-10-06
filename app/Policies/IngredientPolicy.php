@@ -45,7 +45,7 @@ class IngredientPolicy
      */
     public function delete(User $user, Ingredient $ingredient): bool
     {
-        //
+        return $this->update($user, $ingredient);
     }
 
     /**
