@@ -37,7 +37,7 @@ class IngredientPolicy
      */
     public function update(User $user, Ingredient $ingredient): bool
     {
-        //
+        return $ingredient->user()->is($user);
     }
 
     /**
