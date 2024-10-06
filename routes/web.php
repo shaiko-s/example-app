@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('ingredients', IngredientController::class)
-    ->only(['index', 'store'])
+    ->only(['index', 'store', 'update'])
     ->middleware(['auth', 'verified']);
 
 Route::get('/semiproducts', function () {
