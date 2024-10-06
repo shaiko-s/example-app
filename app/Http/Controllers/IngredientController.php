@@ -72,7 +72,7 @@ class IngredientController extends Controller
 
         $ingredient->update($validated);
 
-        return redirect(route('ingredient.index'));
+        return redirect(route('ingredients.index'));
     }
 
     /**
