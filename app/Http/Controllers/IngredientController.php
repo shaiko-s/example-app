@@ -78,8 +78,12 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ingredient $ingredient)
+    public function destroy(Ingredient $ingredient): RedirectResponse
     {
-        //
+        Gate::authorize('delete', $ingredient);
+
+        $ingredient->delete();
+
+        return redirect(route('ingredients.index'));
     }
 }
