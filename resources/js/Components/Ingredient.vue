@@ -24,9 +24,9 @@ const editing = ref(false);
 
             <!-- Form Editing -->
             <div v-if="editing">
+
                 <FormEditOneField :ingredient="ingredient"
-                                  :editing="editing"
-                                  @update:editing="editing = false"
+                                  @handleSubmit="editing = false"
                                   @handleCancel="editing = false" />
             </div>
 
