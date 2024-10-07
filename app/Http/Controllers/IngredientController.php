@@ -42,9 +42,22 @@ class IngredientController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $request->user()->ingredients()->create($validated);
+        $newIngredient = $request->user()->ingredients()->create($validated);
 
-        return redirect()->route('ingredients.index');
+        // Calculate the position of the new ingredient in the ordered list
+        $position = $request->user()->ingredients()
+            ->where('name', '<=', $newIngredient->name)
+            ->orderBy('name')
+            ->count();
+
+        // Define the items per page (assuming 10 items per page)
+        $itemsPerPage = 3;
+
+        // Calculate the page number where the new ingredient would appear
+        $pageNumber = ceil($position / $itemsPerPage);
+
+        // Redirect to the ingredients index with the calculated page number
+        return redirect()->route('ingredients.index', ['page' => $pageNumber]);
     }
 
     /**
