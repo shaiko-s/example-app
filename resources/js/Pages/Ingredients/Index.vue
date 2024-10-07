@@ -1,7 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Header from '@/Components/Header.vue';
-import { useForm, Head, usePage, Link } from '@inertiajs/vue3';
+import { useForm, Head, usePage} from '@inertiajs/vue3';
+import { defineProps, ref } from 'vue';
+import { provide } from 'vue';
 // import { capitalizeFirstLetter } from '@/Composable/useStringUtils.js';
 import Ingredient from '@/Components/Ingredient.vue';
 import FormCreateOneField from '@/Components/FormCreateOneField.vue';
@@ -11,7 +13,7 @@ import WrapperTable from '@/Components/WrapperTable.vue';
 import TableHead from '@/Components/TableHead.vue';
 import SectionHeader from '@/Components/SectionHeader.vue';
 
-defineProps({
+const props = defineProps({
     ingredients: Object,
 });
 
@@ -26,7 +28,10 @@ const page = usePage();
 // Extract the first word from the Component name
 const pageName = page.component.split('/')[0];
 
-console.log(pageName);
+// Define the current page state
+const currentPage = ref(props.ingredients.current_page);
+provide('currentPage', currentPage.value);
+
 </script>
 
 <script>
@@ -73,14 +78,18 @@ export default {
                     <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                         <Ingredient v-for="ingredient in ingredients.data"
                                     :key="ingredient.id"
-                                    :ingredient="ingredient" />
+                                    :ingredient="ingredient"
+                                    />
                     </tbody>
+
                 </table>
+
             </WrapperTable>
 
-            <Pagination :pagination="ingredients" />
+            <Pagination :pagination="ingredients" :current-page="currentPage" />
 
         </section>
+
     </WrapperPrimary>
 
 </template>
