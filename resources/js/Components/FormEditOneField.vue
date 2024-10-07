@@ -1,29 +1,29 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, ref, watch, inject } from 'vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from './SecondaryButton.vue';
 
-
 // Props
-const props = defineProps({
-    ingredient: Object,
-    // editing: Boolean,
-});
+const props = defineProps(['ingredient']);
+
+// Inject the currentPage state
+const currentPage = inject('currentPage');
 
 // Define the emit function
-const emit = defineEmits(['update:editing', 'handleCancel']);
+const emit = defineEmits(['handleSubmit', 'handleCancel']);
 
 // Form setup
 const form = useForm({
     name: props.ingredient.name,
+    page: currentPage, // Include the current page number in the form data
 });
 
 // Watch for changes in the ingredient prop to reset the form
 watch(() => props.ingredient, (newIngredient) => {
-    form.reset({ name: newIngredient.name });
+    form.reset({ name: newIngredient.name});
 });
 
 // Handle form submission
@@ -31,7 +31,7 @@ const handleSubmit = () => {
     form.put(route('ingredients.update', props.ingredient.id), {
         onSuccess: () => {
             form.reset();
-            emit('update:editing', false);
+            emit('handleSubmit', false);
         },
     });
 };
