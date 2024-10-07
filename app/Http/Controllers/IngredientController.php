@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use function Termwind\render;
+
 class IngredientController extends Controller
 {
     /**
@@ -42,7 +44,7 @@ class IngredientController extends Controller
 
         $request->user()->ingredients()->create($validated);
 
-        return redirect(route('ingredients.index'));
+        return redirect()->route('ingredients.index');
     }
 
     /**
@@ -74,7 +76,10 @@ class IngredientController extends Controller
 
         $ingredient->update($validated);
 
-        return redirect(route('ingredients.index'));
+        // Capture the current page number from the request
+        $currentPage = $request->input('page', 1);
+
+        return redirect()->route('ingredients.index', ['page' => $currentPage]);
     }
 
     /**
