@@ -18,7 +18,10 @@ const form = useForm({
 
 const page = usePage();
 
-const pageName = capitalizeFirstLetter(page.url.replace(/^\/+/, ''));
+// const pageName = capitalizeFirstLetter(page.url.replace(/^\/+/, ''));
+
+// Extract the first word from the Component name
+const pageName = page.component.split('/')[0];
 
 </script>
 
