@@ -13,10 +13,10 @@ import { usePage } from '@inertiajs/vue3';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 const page = ref(usePage());
-console.log('page', page);
+// console.log('page', page);
 
 const value = ref(page.value);
-console.log('page.value', value);
+// console.log('page.value', value);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -32,6 +32,9 @@ createInertiaApp({
             .component('Head', Head)
             .use(ZiggyVue)
             .mount(el);
+
+        // Assign the route function to the global properties
+        app.config.globalProperties.$route = route;
     },
     progress: {
         color: '#4B5563',
