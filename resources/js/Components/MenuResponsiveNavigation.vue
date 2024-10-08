@@ -5,6 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 const props = defineProps({
     menu: Array,
     showingNavigationDropdown: Boolean,
+    activeLink: String,
 });
 
 </script>
@@ -13,10 +14,11 @@ const props = defineProps({
     <div :class="{
         block: showingNavigationDropdown,
         hidden: !showingNavigationDropdown,
-        }"
-        class="sm:hidden">
+    }"
+         class="sm:hidden">
         <div class="space-y-1 pb-3 pt-2">
             <ResponsiveNavLink v-for="item in menu"
+                               @click="$emit('update:activeLink', item.route)"
                                :key="item.route"
                                :href="route(item.route)"
                                :active="route().current(item.route)">

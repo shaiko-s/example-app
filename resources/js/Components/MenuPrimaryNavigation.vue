@@ -2,13 +2,14 @@
 import { defineProps } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
-
+import { Link } from '@inertiajs/vue3';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 
 const props = defineProps({
     menu: Array,
     showingNavigationDropdown: Boolean,
+    activeLink: String,
 });
 
 </script>
@@ -20,13 +21,14 @@ const props = defineProps({
                 <!-- Logo -->
                 <div class="flex shrink-0 items-center">
                     <Link :href="route('dashboard')">
-                        <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </Link>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <NavLink v-for="item in menu"
+                             @click="$emit('update:activeLink', item.route)"
                              :key="item.route"
                              :href="route(item.route)"
                              :active="route().current(item.route)">
@@ -38,7 +40,8 @@ const props = defineProps({
             <div class="hidden sm:ms-6 sm:flex sm:items-center">
                 <!-- Settings Dropdown -->
                 <div class="relative ms-3">
-                    <Dropdown align="right" width="48">
+                    <Dropdown align="right"
+                              width="48">
                         <template #trigger>
                             <span class="inline-flex rounded-md">
                                 <button type="button"
@@ -61,7 +64,9 @@ const props = defineProps({
                             <DropdownLink :href="route('profile.edit')">
                                 Profile
                             </DropdownLink>
-                            <DropdownLink :href="route('logout')" method="post" as="button">
+                            <DropdownLink :href="route('logout')"
+                                          method="post"
+                                          as="button">
                                 Log Out
                             </DropdownLink>
                         </template>

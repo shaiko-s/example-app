@@ -11,7 +11,7 @@ const toggleNavigationDropdown = () => {
 
 const menu = [
     { name: 'Dashboard', route: 'dashboard' },
-    { name: 'Chirps', route: 'chirps.index'},
+    { name: 'Chirps', route: 'chirps.index' },
     { name: 'Ingredients', route: 'ingredients.index' },
     { name: 'Semiproducts', route: 'semiproducts' },
     { name: 'Products', route: 'products', },
@@ -26,15 +26,15 @@ const menu = [
             <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
 
                 <!-- Primary Navigation Menu -->
-                <MenuPrimaryNavigation
-                        :menu="menu"
-                        :showingNavigationDropdown="showingNavigationDropdown"
-                        @toggle-navigation-dropdown="toggleNavigationDropdown"/>
+                <MenuPrimaryNavigation v-model:activeLink="activeLink"
+                                       :menu="menu"
+                                       :showingNavigationDropdown="showingNavigationDropdown"
+                                       @toggle-navigation-dropdown="toggleNavigationDropdown" />
 
                 <!-- Responsive Navigation Menu -->
-                <MenuResponsiveNavigation
-                        :menu="menu"
-                        :showingNavigationDropdown="showingNavigationDropdown" />
+                <MenuResponsiveNavigation v-model:activeLink="activeLink"
+                                          :menu="menu"
+                                          :showingNavigationDropdown="showingNavigationDropdown" />
             </nav>
 
             <!-- Page Heading -->
