@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Header from '@/Components/Header.vue';
-import { useForm, Head, usePage} from '@inertiajs/vue3';
+import { useForm, Head, usePage, router} from '@inertiajs/vue3';
 import { defineProps, ref } from 'vue';
 import { provide } from 'vue';
 // import { capitalizeFirstLetter } from '@/Composable/useStringUtils.js';
@@ -15,6 +15,7 @@ import SectionHeader from '@/Components/SectionHeader.vue';
 
 const props = defineProps({
     ingredients: Object,
+    itemsPerPage: Number,
 });
 
 const form = useForm({
@@ -23,8 +24,6 @@ const form = useForm({
 
 const page = usePage();
 
-// const pageName = capitalizeFirstLetter(page.url.replace(/^\/+/, ''));
-
 // Extract the first word from the Component name
 const pageName = page.component.split('/')[0];
 
@@ -32,6 +31,11 @@ const pageName = page.component.split('/')[0];
 const currentPage = ref(props.ingredients.current_page);
 provide('currentPage', currentPage.value);
 
+// Handle items per page change
+const handleItemsPerPageChange = (event) => {
+    // Reload data based on the new items per page
+    router.get(route('ingredients.index'), { itemsPerPage: Number(event.target.value) });
+};
 </script>
 
 <script>
@@ -58,7 +62,19 @@ export default {
         <!-- Ingredients section -->
         <section class="container px-4 mx-auto">
 
-            <SectionHeader :title="pageName" :total="ingredients.total" />
+            <div class="flex justify-between">
+                <SectionHeader :title="pageName" :total="ingredients.total" />
+                <!-- Items per page dropdown -->
+                <div class="mt-4">
+                    <label for="itemsPerPage" class="mr-2 dark:text-gray-400">Items per page:</label>
+                    <!-- <select id="itemsPerPage" v-model="itemsPerPage" @change="handleItemsPerPageChange" class="border w-16 h-10 rounded p-2"> -->
+                    <select id="itemsPerPage" :value="itemsPerPage" @change="handleItemsPerPageChange" class="border w-16 h-10 rounded p-2">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
 
             <WrapperTable>
 
@@ -79,7 +95,7 @@ export default {
                         <Ingredient v-for="ingredient in ingredients.data"
                                     :key="ingredient.id"
                                     :ingredient="ingredient"
-                                    />
+                                    :current-page="currentPage" />
                     </tbody>
 
                 </table>

@@ -16,13 +16,24 @@ class IngredientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return Inertia::render('Ingredients/Index', [
-            'ingredients' => Ingredient::with('user:id,name')
+
+        $itemsPerPage = intval($request->input('itemsPerPage', 10)); // Default to 10 items per page if not provided
+
+        $ingredients = Ingredient::with('user:id,name')
                 ->orderBy('name')
-                ->paginate(3),
+                ->paginate($itemsPerPage);
+
+        return Inertia::render('Ingredients/Index', [
+            'ingredients' => $ingredients,
+            'itemsPerPage' => $itemsPerPage,
         ]);
+        // return Inertia::render('Ingredients/Index', [
+        //     'ingredients' => Ingredient::with('user:id,name')
+        //         ->orderBy('name')
+        //         ->paginate(3),
+        // ]);
     }
 
     /**
