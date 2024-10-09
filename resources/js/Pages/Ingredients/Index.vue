@@ -41,9 +41,12 @@ const handleItemsPerPageChange = (event) => {
     router.get(route('ingredients.index'), { itemsPerPage: Number(event.target.value) });
 };
 
-let search = ref(props.filters.search);
+let search = ref(props.filters.search ?? '');
+provide('search', search.value);
+
 
 watch(search, throttle( function (value) {
+    search.value = value;
     router.get(route('ingredients.index'),
         { search: value },
         {

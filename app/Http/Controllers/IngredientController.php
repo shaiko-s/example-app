@@ -30,10 +30,13 @@ class IngredientController extends Controller
                 ->paginate($itemsPerPage)
                 ->withQueryString();
 
+
+                $filters = $request->only(['search']) ?? $request->input('search');
+
         return Inertia::render('Ingredients/Index', [
             'ingredients' => $ingredients,
             'itemsPerPage' => $itemsPerPage,
-            'filters' => $request->only(['search'])
+            'filters' => $filters,
         ]);
         // return Inertia::render('Ingredients/Index', [
         //     'ingredients' => Ingredient::with('user:id,name')
@@ -73,6 +76,7 @@ class IngredientController extends Controller
         // Calculate the page number where the new ingredient would appear
         $pageNumber = ceil($position / $itemsPerPage);
 
+
         // Redirect to the ingredients index with the calculated page number
         return redirect()->route('ingredients.index', ['page' => $pageNumber]);
     }
@@ -109,7 +113,13 @@ class IngredientController extends Controller
         // Capture the current page number from the request
         $currentPage = $request->input('page', 1);
 
-        return redirect()->route('ingredients.index', ['page' => $currentPage]);
+        $filters = $request->only(['search']);
+
+        return redirect()->route('ingredients.index',
+            [
+                'page' => $currentPage,
+                'filters' => $filters,
+            ]);
     }
 
     /**

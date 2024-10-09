@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import { defineProps, ref, watch, inject } from 'vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -11,6 +11,7 @@ const props = defineProps(['ingredient']);
 
 // Inject the currentPage state
 const currentPage = inject('currentPage');
+const search = ref(inject('search'));
 
 // Define the emit function
 const emit = defineEmits(['handleSubmit', 'handleCancel']);
@@ -19,6 +20,7 @@ const emit = defineEmits(['handleSubmit', 'handleCancel']);
 const form = useForm({
     name: props.ingredient.name,
     page: currentPage, // Include the current page number in the form data
+    // search: search, // Include the search parameter in the form data
 });
 
 // Watch for changes in the ingredient prop to reset the form
@@ -28,10 +30,11 @@ watch(() => props.ingredient, (newIngredient) => {
 
 // Handle form submission
 const handleSubmit = () => {
-    form.put(route('ingredients.update', props.ingredient.id), {
+    form.put(route('ingredients.update', props.ingredient.id, search), {
         onSuccess: () => {
             form.reset();
             emit('handleSubmit', false);
+            router.get(route('ingredients.index'), { filters: props.filters });
         },
     });
 };
