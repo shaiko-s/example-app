@@ -1,8 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Header from '@/Components/Header.vue';
-import { useForm, Head, usePage, router} from '@inertiajs/vue3';
-import { defineProps, ref } from 'vue';
+import { useForm, Head, usePage, router } from '@inertiajs/vue3';
+import { defineProps, ref, watch } from 'vue';
 import { provide } from 'vue';
 // import { capitalizeFirstLetter } from '@/Composable/useStringUtils.js';
 import Ingredient from '@/Components/Ingredient.vue';
@@ -12,10 +12,14 @@ import WrapperPrimary from '@/Components/WrapperPrimary.vue';
 import WrapperTable from '@/Components/WrapperTable.vue';
 import TableHead from '@/Components/TableHead.vue';
 import SectionHeader from '@/Components/SectionHeader.vue';
+import TextInput from '@/Components/TextInput.vue';
+import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
 const props = defineProps({
     ingredients: Object,
     itemsPerPage: Number,
+    filters: Object,
 });
 
 const form = useForm({
@@ -36,6 +40,17 @@ const handleItemsPerPageChange = (event) => {
     // Reload data based on the new items per page
     router.get(route('ingredients.index'), { itemsPerPage: Number(event.target.value) });
 };
+
+let search = ref(props.filters.search);
+
+watch(search, throttle( function (value) {
+    router.get(route('ingredients.index'),
+        { search: value },
+        {
+            preserveState: true,
+            replace: true
+        }) ;
+}, 500));
 </script>
 
 <script>
@@ -63,15 +78,28 @@ export default {
         <section class="container px-4 mx-auto">
 
             <div class="flex justify-between">
-                <SectionHeader :title="pageName" :total="ingredients.total" />
+
+                <!-- Section header -->
+                <SectionHeader :title="pageName"
+                               :total="ingredients.total" />
+
+                <!-- Search input -->
+                <TextInput v-model="search"
+                           type="text"
+                           placeholder="Search..." />
+
                 <!-- Items per page dropdown -->
                 <div class="mt-4">
-                    <label for="itemsPerPage" class="mr-2 dark:text-gray-400">Items per page:</label>
+                    <label for="itemsPerPage"
+                           class="mr-2 dark:text-gray-400">Items per page:</label>
                     <!-- <select id="itemsPerPage" v-model="itemsPerPage" @change="handleItemsPerPageChange" class="border w-16 h-10 rounded p-2"> -->
-                    <select id="itemsPerPage" :value="itemsPerPage" @change="handleItemsPerPageChange" class="border w-16 h-10 rounded p-2">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
+                    <select id="itemsPerPage"
+                            :value="itemsPerPage"
+                            @change="handleItemsPerPageChange"
+                            class="border w-16 h-10 rounded p-2">
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="9">9</option>
                     </select>
                 </div>
             </div>
@@ -84,9 +112,9 @@ export default {
                     <!-- Table head -->
                     <thead class="bg-gray-50 dark:bg-gray-800">
                         <TableHead :heads="[{ checkbox: true, button: true, title: 'Name', az: true, crud: false },
-                                            { checkbox: false, button: true, title: 'Created by', az: false, crud: false  },
-                                            { checkbox: false, button: false, title: 'Created at', az: false, crud: false  },
-                                            { checkbox: false, button: false, title: 'Edit', az: false, crud: true }
+                        { checkbox: false, button: true, title: 'Created by', az: false, crud: false },
+                        { checkbox: false, button: false, title: 'Created at', az: false, crud: false },
+                        { checkbox: false, button: false, title: 'Edit', az: false, crud: true }
                         ]" />
                     </thead>
 
@@ -102,7 +130,8 @@ export default {
 
             </WrapperTable>
 
-            <Pagination :pagination="ingredients" :current-page="currentPage" />
+            <Pagination :pagination="ingredients"
+                        :current-page="currentPage" />
 
         </section>
 

@@ -19,15 +19,21 @@ class IngredientController extends Controller
     public function index(Request $request): Response
     {
 
-        $itemsPerPage = intval($request->input('itemsPerPage', 10)); // Default to 10 items per page if not provided
+        $itemsPerPage = intval($request->input('itemsPerPage', 3)); // Default to 10 items per page if not provided
 
-        $ingredients = Ingredient::with('user:id,name')
+        $ingredients = Ingredient::query()
+                ->when($request->input('search'), function ($query, $search) {
+                    $query->where('name', 'like',  "%{$search}%");
+                })
+                ->with('user:id,name')
                 ->orderBy('name')
-                ->paginate($itemsPerPage);
+                ->paginate($itemsPerPage)
+                ->withQueryString();
 
         return Inertia::render('Ingredients/Index', [
             'ingredients' => $ingredients,
             'itemsPerPage' => $itemsPerPage,
+            'filters' => $request->only(['search'])
         ]);
         // return Inertia::render('Ingredients/Index', [
         //     'ingredients' => Ingredient::with('user:id,name')
