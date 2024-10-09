@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import MenuPrimaryNavigation from '@/Components/MenuPrimaryNavigation.vue';
 import MenuResponsiveNavigation from '@/Components/MenuResponsiveNavigation.vue';
 
+const activeLink = route().current();
 const showingNavigationDropdown = ref(false);
 
 const toggleNavigationDropdown = () => {
